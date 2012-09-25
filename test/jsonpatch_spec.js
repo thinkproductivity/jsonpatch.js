@@ -44,12 +44,6 @@ describe('JSONPointer', function () {
       expect(example.foo.anArray[3]).toEqual('test');
     });
     
-    it('should fail if the object value already exists', function () {
-      expect(function () {
-        add('/foo/another%20prop',example,'test');
-      }).toThrow(new jsonpatch.PatchApplyError('Add operation must not point to an existing value!'));
-    });
-    
     it('should fail if adding to an array would create a sparse array', function () {
       expect(function () {
         add('/foo/anArray/4',example,'test');
@@ -88,11 +82,7 @@ describe('JSONPointer', function () {
       expect(example.foo.anArray.length).toEqual(2);
       expect(example.foo.anArray[1]).toEqual('third');
     });
-    
-    it('should fail if the object key specified doesnt exist', function () {
-      expect(function () {do_remove('/foo/notthere', example);}).toThrow(new jsonpatch.PatchApplyError('Remove operation must point to an existing value!'));
-    });
-    
+
     it('should should fail if the path specified doesnt exist', function () {
       expect(function () {do_remove('/foo/notthere/orhere', example);}).toThrow(new jsonpatch.PatchApplyError('Path not found in document'));
     });

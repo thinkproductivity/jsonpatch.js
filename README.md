@@ -1,3 +1,74 @@
+This fork is a hacked version of the (very nicely written) jsonpatch.js library which can be used to patch mongoose models
+
+It essentially removes some of the error checking and uses the JavaScript ```in``` operator instead of ```Object.hasOwnProperty``` in some cases.
+
+Because of how mongoose models work and how this library interacts with them, only the following operations are allowed:
+
+
+Replacing existing properties of objects
+
+```javascript
+// Patching
+{ name: 'Bob', age: 20, likes: ['dancing', 'singing'] }
+// with patch
+[ { replace: '/name', value: 'David' } ]
+// gives
+{ name: 'David', age: 20, likes: ['dancing', 'singing'] }
+```
+
+Adding elements to arrays:
+```javascript
+// Patching
+{ name: 'Bob', age: 20, likes: ['dancing', 'singing'] }
+// with patch
+[ { add: '/likes/2', value: 'cooking' } ]
+// gives
+{ name: 'Bob', age: 20, likes: ['dancing', 'singing', 'cooking'] }
+```
+
+Removing elements from arrays:
+
+```javascript
+//Patching
+{ name: 'Bob', age: 20, likes: ['dancing', 'singing'] }
+// with patch
+[ { remove: '/likes/1' } ]
+// gives
+{ name: 'Bob', age: 20, likes: ['dancing'] }
+```
+
+Replacing existing properties of objects:
+
+```javascript
+// Patching
+{ name: 'Bob', age: 20, likes: ['dancing', 'singing'] }
+// with patch
+[ { replace: '/likes/1', value: 'murdering' } ]
+// gives
+{ name: 'Bob', age: 20, likes: ['dancing', 'murdering'] }
+```
+
+The following will not work:
+
+```javascript
+// Patching
+{ name: 'Bob', age: 20, likes: [] }
+// with patch 
+[ { add: '/haircolor', value: 'red' } ]
+```
+
+```javascript
+// Patching
+{ name: 'Bob', age: 20, likes: [] }
+// with patch
+[ { remove: '/name' } ]
+```
+
+
+- - -
+- - -
+- - -
+
 UPDATE: JSON Patch draft 4 has just been released which contains two new operations (move and test). This library will be updated to support them shortly.
 
 JSONPatch
